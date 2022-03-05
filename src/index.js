@@ -7,15 +7,6 @@ const content = document.querySelector('.content');
 const PROJECTS = [];
 const projTemplate = document.querySelector('.project');
 
-// test that date-fns is working
-(function generateSample() {
-  const newDate = format(new Date(2022, 3, 4), 'yyyy-MM-dd');
-  const ele = document.createElement('div');
-  ele.textContent = newDate;
-  content.appendChild(ele);
-  testLog();
-})();
-
 
 // generate vars for each project
 const projFactory = (title, desc, priority) => {
@@ -71,7 +62,7 @@ function newProjHandler() {
 
 function newNoteHandler() {
   const newNote = 'this';
-  notes.push(newNote);
+  notes.push(newNote); // how do I access 'notes' if i can't use params
   console.log(notes);
   displayController.regenDom();
 }
@@ -92,3 +83,18 @@ const displayController = (() => {
 
 const newButton = document.getElementById('proj-button');
 newButton.addEventListener("click", newProjHandler)
+
+
+
+
+
+
+
+// test that date-fns is working
+(function generateSample() {
+  const newDate = format(new Date(2022, 2, 5), 'yyyy-MM-dd');
+  const ele = document.createElement('div');
+  ele.textContent = newDate;
+  content.appendChild(ele);
+  testLog();
+})();
