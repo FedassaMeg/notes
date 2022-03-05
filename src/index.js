@@ -19,9 +19,9 @@ const projTemplate = document.querySelector('.project');
 
 // generate vars for each project
 const projFactory = (title, desc, priority) => {
-  // const notes = ['first note', 'second note', 'third note'];
+  const notes = ['first note', 'second note', 'third note'];
   // const dom = genProjElement(title, desc);
-  return { title, desc, priority};
+  return { title, desc, priority, notes};
 };
 
 
@@ -33,12 +33,20 @@ console.log(newProjTest.dom);
 
 // generate the DOM element based on input from the proj object
 // using projTemplate as a reference
-function genProjElement(title, desc) {
+function genProjElement(title, desc, notes) {
   const proj = projTemplate.cloneNode(true);
   const projTitle = proj.querySelector('.project-title');
   projTitle.textContent = title;
   const projDesc = proj.querySelector('.project-desc');
   projDesc.textContent = desc;
+
+  const projNotes = proj.querySelector('.note');
+  
+  for (const note of notes) {
+    const noteContent = document.createElement('div');
+    noteContent.textContent = note;
+    projNotes.appendChild(noteContent); 
+  }
 
   return proj;
 };
@@ -60,7 +68,8 @@ const displayController = (() => {
     content.innerHTML = '';
     for (const ele of PROJECTS) {
       console.log(ele.title);
-      const tempEle = genProjElement(ele.title, ele.desc);
+      const tempEle = genProjElement(ele.title, ele.desc, ele.notes);
+      console.log(ele.notes);
       content.appendChild(tempEle);
     }
   }
