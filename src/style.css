@@ -36,8 +36,11 @@ img {
 .content button {
   border-radius: 6px;
   background-color: #7dd3fc;
-  padding: 3px;
+  padding: 6px 3px;
+  font-weight: bold;
+
 }
+
 
 .menu button {
   border-radius: 8px;
@@ -47,6 +50,12 @@ img {
   background-color: #7dd3fc;
   margin: 14px;
 }
+
+span.material-icons {
+  font-size: 22px;
+}
+
+
 
 hr {
   margin-left: 7%;
@@ -91,7 +100,9 @@ hr {
 
   background-color: #0c4a6e;
   color: rgb(1, 155, 155);
+  font-family: sans-serif;
 }
+
 
 @media only screen and (max-width: 500px) {
   .title-container {

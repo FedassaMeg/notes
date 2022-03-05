@@ -85,16 +85,16 @@ const newButton = document.getElementById('proj-button');
 newButton.addEventListener("click", newProjHandler)
 
 
-
+newProjHandler();
 
 
 
 
 // test that date-fns is working
-(function generateSample() {
-  const newDate = format(new Date(2022, 2, 5), 'yyyy-MM-dd');
-  const ele = document.createElement('div');
-  ele.textContent = newDate;
-  content.appendChild(ele);
-  testLog();
-})();
+// (function generateSample() {
+//   const newDate = format(new Date(2022, 2, 5), 'yyyy-MM-dd');
+//   const ele = document.createElement('div');
+//   ele.textContent = newDate;
+//   content.appendChild(ele);
+//   testLog();
+// })();
