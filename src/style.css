@@ -52,6 +52,10 @@ img {
   margin: 14px;
 }
 
+.menu-projs {
+  font-family: sans-serif;
+}
+
 span.material-icons {
   font-size: 22px;
 }
@@ -100,6 +104,7 @@ hr {
   border: 2px solid #0994d4;;
   border-radius: 4px;
   margin-top: 10px;
+  margin-left: 24px;
 }
 
 .note button {
@@ -143,5 +148,10 @@ hr {
 
   hr {
     width: 0px;
+  }
+
+  .note {
+    width: 100%;
+    margin-left: 0px;
   }
 }

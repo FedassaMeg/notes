@@ -24,7 +24,7 @@ console.log(newProjTest.dom);
 
 // generate the DOM element based on input from the proj object
 // using projTemplate as a reference
-function genProjElement(title, desc, notes) {
+function genProjElement(title, desc, notes, index) {
   const proj = projTemplate.cloneNode(true);
   const projTitle = proj.querySelector('.project-title');
   projTitle.textContent = title;
@@ -45,6 +45,9 @@ function genProjElement(title, desc, notes) {
   const delProjBtn = proj.querySelector('.del-project');
   delProjBtn.addEventListener("click", function() {
     console.log('testing del project');
+    console.log(index);
+    PROJECTS.splice(index, 1);
+    displayController.regenDom();
   })
 
 
@@ -95,13 +98,15 @@ function newNoteHandler() {
   displayController.regenDom();
 }
 
+// for (const [index, note] of notes.entries()) {
+
 const displayController = (() => {
   const regenDom = () => {
     console.log('DC log 1');
     content.innerHTML = '';
-    for (const ele of PROJECTS) {
+    for (const [index, ele] of PROJECTS.entries()) {
       console.log(ele.title);
-      const tempEle = genProjElement(ele.title, ele.desc, ele.notes);
+      const tempEle = genProjElement(ele.title, ele.desc, ele.notes, index);
       console.log(ele.notes);
       content.appendChild(tempEle);
     }
