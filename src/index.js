@@ -33,6 +33,8 @@ function genProjElement(title, desc, notes) {
 
 
   const noteBtn = proj.querySelector('.new-note');
+  // should probably m ove this
+
   noteBtn.addEventListener("click", function() {
     const newNote = 'new note';
     notes.push(newNote);
@@ -40,16 +42,30 @@ function genProjElement(title, desc, notes) {
     displayController.regenDom();
   });
 
+  const delProjBtn = proj.querySelector('.del-project');
+  delProjBtn.addEventListener("click", function() {
+    console.log('testing del project');
+  })
+
+
   const projNotes = proj.querySelector('.notes-container');
 
-  for (const note of notes) {
+  // go through notes array and generate a new note element for each item in array
+  for (const [index, note] of notes.entries()) {
     const noteContent = document.createElement('div');
     noteContent.classList.add('note');
-    // noteContent.textContent = note;
     const noteText = document.createElement('div');
     noteText.textContent = note;
     const noteDel = document.createElement('button');
     noteDel.textContent = 'X';
+
+    // should probably move this somewhere outside
+    noteDel.addEventListener('click', function() {
+      console.log(index);
+      notes.splice(index, 1);
+      displayController.regenDom();
+    })
+
     noteContent.append(noteText, noteDel);
     projNotes.appendChild(noteContent);
   }
@@ -64,6 +80,11 @@ function newProjHandler() {
   const newProj = projFactory(title, desc, 3);
   PROJECTS.push(newProj);
   // console.log(PROJECTS);
+  displayController.regenDom();
+}
+
+function delProjHandler() {
+  PROJECTS.splice(index, 1);
   displayController.regenDom();
 }
 
