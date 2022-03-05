@@ -31,7 +31,6 @@ function genProjElement(title, desc, notes) {
   const projDesc = proj.querySelector('.project-desc');
   projDesc.textContent = desc;
 
-  const projNotes = proj.querySelector('.note');
 
   const noteBtn = proj.querySelector('.new-note');
   noteBtn.addEventListener("click", function() {
@@ -40,10 +39,18 @@ function genProjElement(title, desc, notes) {
     console.log(notes);
     displayController.regenDom();
   });
-  
+
+  const projNotes = proj.querySelector('.notes-container');
+
   for (const note of notes) {
     const noteContent = document.createElement('div');
-    noteContent.textContent = note;
+    noteContent.classList.add('note');
+    // noteContent.textContent = note;
+    const noteText = document.createElement('div');
+    noteText.textContent = note;
+    const noteDel = document.createElement('button');
+    noteDel.textContent = 'X';
+    noteContent.append(noteText, noteDel);
     projNotes.appendChild(noteContent);
   }
 
@@ -84,10 +91,8 @@ const displayController = (() => {
 const newButton = document.getElementById('proj-button');
 newButton.addEventListener("click", newProjHandler)
 
-
+// generate first note
 newProjHandler();
-
-
 
 
 // test that date-fns is working

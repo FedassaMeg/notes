@@ -24,6 +24,7 @@ img {
   font-family: sans-serif;
   color: white;
   background-color: #075985; /* sky 800 */
+  padding-top: 10px;
 }
 
 .menu {
@@ -58,8 +59,7 @@ span.material-icons {
 
 
 hr {
-  margin-left: 7%;
-  width: 86%;
+  width: 82%;
 }
 
 .content {
@@ -92,7 +92,22 @@ hr {
   font-size: 1.1rem;
 }
 
+.note {
+  display: flex;
+  align-items: center;
+  width: 68%;
+
+  border: 2px solid #0994d4;;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.note button {
+  margin-left: auto;
+}
+
 .footer {
+  grid-row: -2;
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
