@@ -19,7 +19,7 @@ const projTemplate = document.querySelector('.project');
 
 // generate vars for each project
 const projFactory = (title, desc, priority) => {
-  const notes = ['first note', 'second note', 'third note'];
+  const notes = ['first note'];
   // const dom = genProjElement(title, desc);
   return { title, desc, priority, notes};
 };
@@ -41,11 +41,19 @@ function genProjElement(title, desc, notes) {
   projDesc.textContent = desc;
 
   const projNotes = proj.querySelector('.note');
+
+  const noteBtn = proj.querySelector('.new-note');
+  noteBtn.addEventListener("click", function() {
+    const newNote = 'new note';
+    notes.push(newNote);
+    console.log(notes);
+    displayController.regenDom();
+  });
   
   for (const note of notes) {
     const noteContent = document.createElement('div');
     noteContent.textContent = note;
-    projNotes.appendChild(noteContent); 
+    projNotes.appendChild(noteContent);
   }
 
   return proj;
@@ -61,6 +69,12 @@ function newProjHandler() {
   displayController.regenDom();
 }
 
+function newNoteHandler() {
+  const newNote = 'this';
+  notes.push(newNote);
+  console.log(notes);
+  displayController.regenDom();
+}
 
 const displayController = (() => {
   const regenDom = () => {
