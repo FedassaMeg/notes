@@ -7,7 +7,6 @@ const content = document.querySelector(".content");
 const projects = [];
 const projTemplate = document.querySelector(".project");
 
-
 let openProject = null;
 
 // generate vars for each project
@@ -32,17 +31,40 @@ function genProjElement(title, desc, notes, index) {
   const projTitle = proj.querySelector(".project-title");
   projTitle.textContent = title;
   const editBtn = proj.querySelector(".edit-title-btn");
+  const expandBtn = proj.querySelector(".expand-btn");
   const projDesc = proj.querySelector(".project-desc");
   projDesc.textContent = desc;
 
   const noteBtn = proj.querySelector(".new-note");
+  noteBtn.style.display = "none";
   // should probably m ove this
+  const projNotes = proj.querySelector(".notes-container");
+
 
   noteBtn.addEventListener("click", function () {
     const newNote = "new note";
     notes.push(newNote);
-    console.log(notes);
-    displayController.regenDom();
+    projNotes.innerHTML = '';
+    const newNotes = noteGenerate(projNotes, notes, true);
+    projects[index].notes = newNotes;
+    console.log(projects);
+  });
+
+  expandBtn.addEventListener("click", (event) => {
+    const noteEditbtns = proj.querySelectorAll(".edit-note-btn");
+    if (event.target.textContent === "EXPAND") {
+      proj.classList.add("expanded-project");
+      Array.from(noteEditbtns).map(
+        (btn) => (btn.style.display = "inline-block")
+      );
+      noteBtn.style.display = "inline-block";
+      event.target.textContent = "COLLAPSE";
+    } else {
+      proj.classList.remove("expanded-project");
+      Array.from(noteEditbtns).map((btn) => (btn.style.display = "none"));
+      noteBtn.style.display = "none";
+      event.target.textContent = "EXPAND";
+    }
   });
 
   editBtn.addEventListener("click", (event) => {
@@ -84,29 +106,11 @@ function genProjElement(title, desc, notes, index) {
     displayController.regenDom();
   });
 
-  const projNotes = proj.querySelector(".notes-container");
 
   // go through notes array and generate a new note element for each item in array
-  for (const [index, note] of notes.entries()) {
-    const noteContent = document.createElement("div");
-    noteContent.classList.add("note");
-    const noteText = document.createElement("div");
-    noteText.textContent = note;
-    const noteDel = document.createElement("button");
-    noteDel.textContent = "X";
+ const newNotes = noteGenerate(projNotes, notes, false);
 
-    // should probably move this somewhere outside
-    noteDel.addEventListener("click", function () {
-      console.log(index);
-      notes.splice(index, 1);
-      displayController.regenDom();
-    });
-
-    noteContent.append(noteText, noteDel);
-    projNotes.appendChild(noteContent);
-  }
-
-  return proj;
+ return proj;
 }
 
 closeModalBtn.addEventListener("click", () => modal.classList.remove("active"));
@@ -132,6 +136,53 @@ function newNoteHandler() {
   notes.push(newNote); // how do I access 'notes' if i can't use params
   console.log(notes);
   displayController.regenDom();
+}
+
+function noteGenerate(container, notes, isEdit) {
+  for (let [index, note] of notes.entries()) {
+    const btnCntr = document.createElement("div");
+    const noteContent = document.createElement("div");
+    noteContent.classList.add("note");
+    const noteText = document.createElement("div");
+    noteText.textContent = note;
+    const noteDel = document.createElement("button");
+    noteDel.textContent = "X";
+    const noteEdit = document.createElement("button");
+    noteEdit.classList.add("edit-note-btn");
+    noteEdit.textContent = "EDIT";
+    noteEdit.style.display = !isEdit ? "none" : "inline-block";
+    
+    const textarea = document.createElement("textarea");
+    textarea.style.display = "none";
+    textarea.classList.add("textarea-note")
+    
+    
+    // should probably move this somewhere outside
+    noteDel.addEventListener("click", function () {
+      notes.splice(index, 1);
+      noteContent.remove();
+    });
+    
+    noteEdit.addEventListener("click", () => {
+      if(noteEdit.textContent === "EDIT") {
+        textarea.style.display = "block";
+        textarea.value = note;
+        noteText.style.display = "none";
+        noteEdit.textContent = "SAVE";
+      } else {
+        textarea.style.display = "none";
+        notes[index] = textarea.value;
+        noteText.textContent = notes[index];
+        noteText.style.display = "block";
+        noteEdit.textContent = "EDIT";
+      }
+    })
+
+    btnCntr.append(noteDel, noteEdit);
+    noteContent.append(noteText, textarea, btnCntr);
+    container.append(noteContent);
+  }
+  return notes;
 }
 
 // for (const [index, note] of notes.entries()) {

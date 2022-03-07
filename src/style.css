@@ -95,6 +95,7 @@ hr {
 .note {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 68%;
 
   border: 2px solid #0994d4;
@@ -103,8 +104,7 @@ hr {
   margin-left: 24px;
 }
 
-.note button {
-  margin-left: auto;
+.note .edit-note-btn {
 }
 
 .footer {
@@ -167,4 +167,16 @@ hr {
 
 .active {
   display: block;
+}
+
+.expanded-project {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
 }
