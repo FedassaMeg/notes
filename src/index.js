@@ -1,98 +1,134 @@
-import './style.css';
-import { format } from 'date-fns'; 
-import Apple from './apple.jpg'; // placeholder
-import testLog from './alt.js';
+import "./style.css";
+import { format } from "date-fns";
+import Apple from "./apple.jpg"; // placeholder
+import testLog from "./alt.js";
 
-const content = document.querySelector('.content');
-const PROJECTS = [];
-const projTemplate = document.querySelector('.project');
+const content = document.querySelector(".content");
+const projects = [];
+const projTemplate = document.querySelector(".project");
 
+
+let openProject = null;
 
 // generate vars for each project
-const projFactory = (title, desc, priority) => {
-  const notes = ['first note'];
+const projFactory = (id, title, desc, priority) => {
+  const notes = ["first note"];
   // const dom = genProjElement(title, desc);
-  return { title, desc, priority, notes};
+  return { id, title, desc, priority, notes };
 };
 
-
-const newProjTest = projFactory('word', 'words', 3);
+const newProjTest = projFactory("word", "words", 3);
 // content.appendChild(newProjTest.dom);
 console.log(newProjTest.title);
 console.log(newProjTest.dom);
 
-
+const modal = document.querySelector(".modal");
+const closeModalBtn = modal.querySelector(".close-modal");
 // generate the DOM element based on input from the proj object
 // using projTemplate as a reference
 function genProjElement(title, desc, notes, index) {
   const proj = projTemplate.cloneNode(true);
-  const projTitle = proj.querySelector('.project-title');
+  proj.id = `project-${index}`;
+  const projTitle = proj.querySelector(".project-title");
   projTitle.textContent = title;
-  const projDesc = proj.querySelector('.project-desc');
+  const editBtn = proj.querySelector(".edit-title-btn");
+  const projDesc = proj.querySelector(".project-desc");
   projDesc.textContent = desc;
 
-
-  const noteBtn = proj.querySelector('.new-note');
+  const noteBtn = proj.querySelector(".new-note");
   // should probably m ove this
 
-  noteBtn.addEventListener("click", function() {
-    const newNote = 'new note';
+  noteBtn.addEventListener("click", function () {
+    const newNote = "new note";
     notes.push(newNote);
     console.log(notes);
     displayController.regenDom();
   });
 
-  const delProjBtn = proj.querySelector('.del-project');
-  delProjBtn.addEventListener("click", function() {
-    console.log('testing del project');
+  editBtn.addEventListener("click", (event) => {
+    modal.querySelector(".footer").innerHTML = "";
+    const saveModalBtn = document.createElement("button");
+    saveModalBtn.classList.add(".save-modal");
+    saveModalBtn.textContent = "SAVE";
+    modal.querySelector(".footer").append(saveModalBtn);
+
+    openProject = index;
+    // if (input.style.display === "none") {
+    //   input.style.display = "block";
+    // } else {
+    //   input.style.display = "none";
+    // }
+    modal.classList.add("active");
+
+    saveModalBtn.addEventListener("click", () => {
+      const inputTitle = modal.querySelector(".project-title-input");
+      const inputDesc = modal.querySelector(".project-desc-input");
+      const title = inputTitle.value;
+      const desc = inputDesc.value;
+
+      const currProject = projects[index];
+      currProject.title = title;
+      currProject.desc = desc;
+      projDesc.textContent = desc;
+      projTitle.textContent = title;
+
+      modal.classList.remove("active");
+    });
+  });
+
+  const delProjBtn = proj.querySelector(".del-project");
+  delProjBtn.addEventListener("click", function () {
+    console.log("testing del project");
     console.log(index);
-    PROJECTS.splice(index, 1);
+    projects.splice(index, 1);
     displayController.regenDom();
-  })
+  });
 
-
-  const projNotes = proj.querySelector('.notes-container');
+  const projNotes = proj.querySelector(".notes-container");
 
   // go through notes array and generate a new note element for each item in array
   for (const [index, note] of notes.entries()) {
-    const noteContent = document.createElement('div');
-    noteContent.classList.add('note');
-    const noteText = document.createElement('div');
+    const noteContent = document.createElement("div");
+    noteContent.classList.add("note");
+    const noteText = document.createElement("div");
     noteText.textContent = note;
-    const noteDel = document.createElement('button');
-    noteDel.textContent = 'X';
+    const noteDel = document.createElement("button");
+    noteDel.textContent = "X";
 
     // should probably move this somewhere outside
-    noteDel.addEventListener('click', function() {
+    noteDel.addEventListener("click", function () {
       console.log(index);
       notes.splice(index, 1);
       displayController.regenDom();
-    })
+    });
 
     noteContent.append(noteText, noteDel);
     projNotes.appendChild(noteContent);
   }
 
   return proj;
-};
+}
+
+closeModalBtn.addEventListener("click", () => modal.classList.remove("active"));
 
 // new project note creator
 function newProjHandler() {
+  const id = 1;
   const title = "Project Title"; // prompt("enter project title: ");
-  const desc =  "Project Description"; // prompt("Enter project description: ");
-  const newProj = projFactory(title, desc, 3);
-  PROJECTS.push(newProj);
-  // console.log(PROJECTS);
+  const desc = "Project Description"; // prompt("Enter project description: ");
+  const newProj = projFactory(id, title, desc, 3);
+  projects.push(newProj);
+  // console.log(projects);
   displayController.regenDom();
 }
 
 function delProjHandler() {
-  PROJECTS.splice(index, 1);
+  projects.splice(index, 1);
   displayController.regenDom();
 }
 
 function newNoteHandler() {
-  const newNote = 'this';
+  const newNote = "this";
   notes.push(newNote); // how do I access 'notes' if i can't use params
   console.log(notes);
   displayController.regenDom();
@@ -102,24 +138,23 @@ function newNoteHandler() {
 
 const displayController = (() => {
   const regenDom = () => {
-    console.log('DC log 1');
-    content.innerHTML = '';
-    for (const [index, ele] of PROJECTS.entries()) {
+    console.log("DC log 1");
+    content.innerHTML = "";
+    for (const [index, ele] of projects.entries()) {
       console.log(ele.title);
       const tempEle = genProjElement(ele.title, ele.desc, ele.notes, index);
       console.log(ele.notes);
       content.appendChild(tempEle);
     }
-  }
-  return {regenDom}
+  };
+  return { regenDom };
 })();
 
-const newButton = document.getElementById('proj-button');
-newButton.addEventListener("click", newProjHandler)
+const newButton = document.getElementById("proj-button");
+newButton.addEventListener("click", newProjHandler);
 
 // generate first note
 newProjHandler();
-
 
 // test that date-fns is working
 // (function generateSample() {
